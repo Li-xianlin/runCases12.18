@@ -10,7 +10,7 @@ initPar.xf0     = 0.15;
 initPar.xiHat0  = initPar.qbitHat0+l1*initPar.Pp0;%%推导出来直接写
 
         theta10  = (plantPar.Fd+2*plantPar.Fa)/(plantPar.Ma+plantPar.Md);
-initPar.thetaHat0 = [theta10;-8.3640e-006];%？？？
+initPar.thetaHat0 = [theta10;-8.3640e-006];
 
 %-8.3640e-006
 a1      = plantPar.betad/plantPar.Vd;
