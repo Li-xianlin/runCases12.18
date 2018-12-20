@@ -1,5 +1,5 @@
-function [Pp, Pc, qbit, qchoke, Pbit, Zc] =...
-    simulateStamnes(plantPar, tuningPar, initPar, qpump, qback, hbit, VaDot)
+function [Pp, Pc, qbit, qchoke, Pbit] =...
+    simulateStamnes(plantPar, tuningPar, initPar, qpump, qback, hbit, VaDot,Zc )
 
 
 y0 = [initPar.Pp0 initPar.Pc0 initPar.qbit0]';%%σsigma  ξ xi
@@ -12,7 +12,7 @@ Pc      = zeros(1, simLength+1);
 Pbit    = zeros(1, simLength+1);
 qbit    = zeros(1, simLength+1);
 qchoke  = zeros(1, simLength+1);
-Zc      = zeros(1, simLength+1);
+% Zc      = zeros(1, simLength+1);
 
 Pp(1)       = initPar.Pp0;%%赋予初值
 Pc(1)       = initPar.Pc0;
@@ -25,13 +25,13 @@ for time = 2:simLength+1
    % time-1
     timeSpan = time:stepSize:time+1;
     
-    [yOut xtraOut] = ode4m(@(t, y) totalSystem(t, y, plantPar, tuningPar, qpump(mod(time,1601)+1), qback(mod(time,1601)+1), hbit(mod(time,1601)+1),VaDot(mod(time,1601)+1)), timeSpan, y0);
+    [yOut xtraOut] = ode4m(@(t, y) totalSystem(t, y, plantPar, tuningPar, qpump(mod(time,1601)+1), qback(mod(time,1601)+1), hbit(mod(time,1601)+1),VaDot(mod(time,1601)+1),Zc(mod(time,1601)+1)), timeSpan, y0);
     Pp(time)        = max(1,yOut(end, 1));
     Pc(time)        = max(0,yOut(end, 2));
     qbit(time)      = max(0,yOut(end, 3));
     qchoke(time)    = xtraOut(end).var1;
     Pbit(time)      = xtraOut(end).var2;
-    Zc(time)        = xtraOut(end).var3;
+%     Zc(time)        = xtraOut(end).var3;
    
     y0 = [max(1,yOut(end, 1))
           max(0,yOut(end, 2))
@@ -40,7 +40,7 @@ for time = 2:simLength+1
 end   
 end
 
-function [dydt xtra] = totalSystem(t,y,plantPar, tuningPar, qpump, qback, hbit, VaDot)
+function [dydt xtra] = totalSystem(t,y,plantPar, tuningPar, qpump, qback, hbit, VaDot, Zc)
 
 % persistent eSum;%%persistent 持久变量 一般与if（isempty())搭配
 % if(isempty(eSum))%%esum为空变量
@@ -65,7 +65,7 @@ g       = plantPar.g;
 
 %%%开环响应
 % Tuning parameters
-Zc      = tuningPar.Zc;
+% Zc      = tuningPar.Zc;
 
 qres    = tuningPar.qres;
 
@@ -102,7 +102,7 @@ Pbit    = Pc + Ma*qbitDot + Fa*abs(qbit+qres)*(qbit+qres) + rhoa*g*hbit;
 % Additional output variables
 xtra.var1 = qchoke;
 xtra.var2 = Pbit;
-xtra.var3 = Zc;
+% xtra.var3 = Zc;
 %Collect the dynamtics
 if (Pp <=1 && PpDot < 0)
     PpDot = 0;

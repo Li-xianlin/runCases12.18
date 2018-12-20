@@ -6,17 +6,18 @@ clc;
 %Get constants
 plantPar    = getPlantPar();
 tuningPar   = getTuningPar();
-initPar     = getInitPar(plantPar, tuningPar);
-[qpump qback hbit VaDot] = makeCase11();
+initPar     = getInitPar();
+[qpump qback hbit VaDot Zc] = makeCase11();
 
 %Run simulation
-[Pp, Pc, qbit, qchoke, Pbit, Zc]...
-    = simulateStamnes(plantPar, tuningPar, initPar, qpump, qback, hbit, VaDot);
+[Pp, Pc, qbit, qchoke, Pbit]...
+    = simulateStamnes(plantPar, tuningPar, initPar, qpump, qback, hbit, VaDot,Zc);
 
 qpumpL = [qpump qpump];
 qbackL = [qback qback];
 hbitL  = [hbit hbit];
 VaDotL  = [VaDot VaDot];
+ZcL   =[Zc Zc];
 
 
 %PLOTS

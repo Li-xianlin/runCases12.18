@@ -1,4 +1,6 @@
-function [qpump qback hbit VaDot] = makeCase11()
+% function [qpump qback hbit VaDot] = makeCase11()
+function [qpump qback hbit VaDot Zc] = makeCase11()
+
 %%%不考虑回压，qback=0;
 
 simLength = 1600;
@@ -7,13 +9,15 @@ qpump = zeros(1, simLength+1);
 qback = zeros(1, simLength+1);
 hbit  = zeros(1, simLength+1);
 VaDot = zeros(1, simLength+1);
+Zc    = zeros(1, simLength+1);
 
     for i = 1:400
         qpump(i)    = 1500/6e4;
 %         hbit(i)     = 1826;%+0.1*i;
 %          hbit(i)     = 1826+0.1*i;
-          hbit(i)     = 1826;    
-        VaDot(i)    = 0;
+          hbit(i)   = 1826;    
+          VaDot(i)  = 0;
+         Zc (i)     =0.6;
     end 
     
     for i = 401:520
@@ -22,14 +26,16 @@ VaDot = zeros(1, simLength+1);
 %         hbit(i)     = hbit(i-1);
         hbit(i)     = 1826;  
         VaDot(i)    = 0;
+        Zc (i)     =0.6;
     end
 
     for i = 521:1120
-        qpump(i)    = 1500/6e4;
+        qpump(i)    = 1500/6e4;%%单位是什么？？
 %         hbit(i)     = 1826;%+(i-520)*0.1;
 %         hbit(i)     = hbit(i-1);
         hbit(i)     = 1826;  
         VaDot(i)    = 0;
+        Zc (i)     =0.5;
     end
 
     for i = 1121:1240
@@ -38,6 +44,7 @@ VaDot = zeros(1, simLength+1);
 %         hbit(i)     = hbit(i-1);
         hbit(i)     = 1826;  
         VaDot(i)    = 0;
+         Zc (i)     =0.5;
     end
     
     for i = 1241:1601
@@ -46,6 +53,7 @@ VaDot = zeros(1, simLength+1);
 %         hbit(i)     =  1866+ (i-1240)*0.1;
           hbit(i)     = 1826;  
         VaDot(i)    = 0;
+         Zc (i)     =0.5;
     end
     
 % %     for i = 540:570
